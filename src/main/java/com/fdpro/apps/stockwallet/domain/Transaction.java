@@ -22,7 +22,7 @@ public class Transaction {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Symbol symbol;
     @Column(nullable = false)
     private int units;
@@ -62,6 +62,8 @@ public class Transaction {
 
         return new Builder(TransactionType.SELL, units, symbol);
     }
+
+    private Transaction() {}
 
     private Transaction(Builder builder) {
         type = builder.type;

@@ -9,6 +9,6 @@ import org.springframework.data.repository.Repository;
  *
  * @author fdpro
  */
-public interface WalletRepository extends JpaRepository<Wallet, Long> {
+public interface WalletRepository extends JpaRepository<Wallet, String> {
 
 }

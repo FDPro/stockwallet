@@ -2,18 +2,19 @@ package com.fdpro.apps.stockwallet.domain;
 
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
 public class Symbol {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Column(nullable = false)
     private String code;
     @Column(nullable = false)
     private String name;
+
+    private Symbol() {}
 
     public Symbol(String code, String name) {
         Assert.hasText(code, "Code must contain some significant characters");
@@ -21,10 +22,6 @@ public class Symbol {
 
         this.code = code;
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getCode() {
@@ -40,11 +37,11 @@ public class Symbol {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Symbol symbol = (Symbol) o;
-        return Objects.equals(id, symbol.id);
+        return code.equals(symbol.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(code);
     }
 }

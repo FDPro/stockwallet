@@ -55,6 +55,8 @@ public class CashFlow {
         return new CashFlow(CashFlowType.WITHDRAWAL, amount);
     }
 
+    private CashFlow() {}
+
     private CashFlow(CashFlowType type, MonetaryAmount amount) {
         this.type = type;
         this.amount = amount;

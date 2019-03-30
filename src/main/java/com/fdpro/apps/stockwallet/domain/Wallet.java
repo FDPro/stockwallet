@@ -18,9 +18,6 @@ import java.util.Objects;
 @Entity
 public class Wallet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Column(nullable = false)
     private String name;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
@@ -29,16 +26,14 @@ public class Wallet {
     @OrderColumn
     private List<Transaction> transactions;
 
+    private Wallet() {}
+
     public Wallet(String name) {
         Assert.hasText(name, "The name must contain some significant characters");
 
         this.name = name;
         this.cashFlows = new ArrayList<>();
         this.transactions = new ArrayList<>();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -106,11 +101,11 @@ public class Wallet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Wallet wallet = (Wallet) o;
-        return Objects.equals(id, wallet.id);
+        return Objects.equals(name, wallet.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
 }

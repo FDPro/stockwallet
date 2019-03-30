@@ -5,11 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.money.MonetaryAmount;
-
 import java.math.BigDecimal;
 
 import static com.fdpro.apps.stockwallet.WalletTestUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WalletTest {
     private Wallet wallet;

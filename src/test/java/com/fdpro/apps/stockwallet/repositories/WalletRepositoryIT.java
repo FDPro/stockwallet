@@ -11,7 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
-import static com.fdpro.apps.stockwallet.WalletTestUtils.*;
+import static com.fdpro.apps.stockwallet.WalletTestUtils.EURO;
+import static com.fdpro.apps.stockwallet.WalletTestUtils.EURO_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -68,14 +69,13 @@ class WalletRepositoryIT {
     }
 
     private Wallet getIfFoundFailOtherwise() {
-        Optional<Wallet> maybeFoundWallet = repository.findById(wallet.getId());
+        Optional<Wallet> maybeFoundWallet = repository.findById(wallet.getName());
         assertTrue(maybeFoundWallet.isPresent());
         return maybeFoundWallet.get();
     }
 
     private void verifyContent(Wallet foundWallet) {
         assertEquals(wallet, foundWallet);
-        assertEquals(wallet.getId(), foundWallet.getId());
         assertEquals(wallet.getName(), foundWallet.getName());
         assertEquals(wallet.amount(EURO), foundWallet.amount(EURO));
         assertEquals(wallet.count(symbol), foundWallet.count(symbol));
