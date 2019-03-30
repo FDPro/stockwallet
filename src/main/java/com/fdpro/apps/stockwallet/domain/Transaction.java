@@ -1,23 +1,46 @@
 package com.fdpro.apps.stockwallet.domain;
 
+import com.fdpro.apps.stockwallet.domain.orm.MonetaryAmountConverter;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
 
 import javax.money.MonetaryAmount;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Represents a {@link Symbol} buy or sell in a wallet
  *
  * @author fdpro
  */
+@Entity
 public class Transaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Symbol symbol;
+    @Column(nullable = false)
     private int units;
+    @Column(nullable = false)
+    @Convert(converter = MonetaryAmountConverter.class)
     private MonetaryAmount unitPrice;
+    @Column(nullable = false)
+    @Convert(converter = MonetaryAmountConverter.class)
     private MonetaryAmount transactionCost;
 
+    /**
+     * Creates a buying transaction builder for x units of a symbol
+     * @param units the units
+     * @param symbol the symbol
+     * @return a {@link Builder} of a buying {@link Transaction} of {@code units} units of {@code symbol}
+     * @throws IllegalArgumentException when {@code units} is lesser or equal to 0
+     * @throws IllegalArgumentException when {@code symbol} is {@literal null}
+     */
     public static Builder buy(int units, Symbol symbol) {
         Assert.isTrue(units > 0, "Units must be greater than 0");
         Assert.notNull(symbol, "Symbol mustn't be null");
@@ -25,6 +48,14 @@ public class Transaction {
         return new Builder(TransactionType.BUY, units, symbol);
     }
 
+    /**
+     * Creates a selling transaction builder for x units of a symbol
+     * @param units the units
+     * @param symbol the symbol
+     * @return a {@link Builder} of a selling {@link Transaction} of {@code units} units of {@code symbol}
+     * @throws IllegalArgumentException when {@code units} is lesser or equal to 0
+     * @throws IllegalArgumentException when {@code symbol} is {@literal null}
+     */
     public static Builder sell(int units, Symbol symbol) {
         Assert.isTrue(units > 0, "Units must be greater than 0");
         Assert.notNull(symbol, "Symbol mustn't be null");
@@ -38,6 +69,10 @@ public class Transaction {
         units = builder.units;
         unitPrice = builder.unitPrice;
         transactionCost = builder.transactionCost;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Symbol getSymbol() {
@@ -69,6 +104,19 @@ public class Transaction {
 
     private int amountSign() {
         return - symbolSign();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     private enum TransactionType {

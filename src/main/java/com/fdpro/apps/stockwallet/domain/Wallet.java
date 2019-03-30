@@ -5,17 +5,28 @@ import org.springframework.util.Assert;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a wallet
  *
  * @author fdpro
  */
+@Entity
 public class Wallet {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(nullable = false)
     private String name;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderColumn
     private List<CashFlow> cashFlows;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderColumn
     private List<Transaction> transactions;
 
     public Wallet(String name) {
@@ -24,6 +35,10 @@ public class Wallet {
         this.name = name;
         this.cashFlows = new ArrayList<>();
         this.transactions = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -84,5 +99,18 @@ public class Wallet {
           .filter(transaction -> transaction.getSymbol().equals(symbol))
           .mapToInt(Transaction::count)
           .sum();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wallet wallet = (Wallet) o;
+        return Objects.equals(id, wallet.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
