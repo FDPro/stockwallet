@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -17,13 +18,17 @@ import java.util.Objects;
  *
  * @author fdpro
  */
-@Entity
+@Entity(name = "TRANSACTON")
 @JsonRootName("transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty
     private Long id;
+
+    @Column(nullable = false)
+    @JsonProperty
+    private LocalDate date;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -82,6 +87,7 @@ public class Transaction {
 
     private Transaction(Builder builder) {
         type = builder.type;
+        date = builder.date;
         symbol = builder.symbol;
         units = builder.units;
         unitPrice = builder.unitPrice;
@@ -142,6 +148,7 @@ public class Transaction {
     }
 
     public static final class Builder {
+        private LocalDate date;
         private TransactionType type;
         private Symbol symbol;
         private int units;
@@ -152,6 +159,13 @@ public class Transaction {
             this.type = type;
             this.units = units;
             this.symbol = symbol;
+        }
+
+        public Builder on(LocalDate date) {
+            Assert.notNull(date, "Date mustn't be null");
+
+            this.date = date;
+            return this;
         }
 
         public Builder atPrice(MonetaryAmount price) {
@@ -171,6 +185,7 @@ public class Transaction {
         }
 
         public Transaction build() {
+            Assert.notNull(date, "The transaction must have occur on a date");
             Assert.notNull(unitPrice, "The transaction must have a price");
 
             if (transactionCost == null) {

@@ -10,11 +10,15 @@ import com.fdpro.apps.stockwallet.util.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.time.LocalDate;
 
 import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.EURO_AMOUNT;
 import static org.hamcrest.Matchers.equalTo;
@@ -24,9 +28,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@TestPropertySource(locations="classpath:test.properties")
 @AutoConfigureMockMvc
 class WalletControllerIT {
     private static final String WALLET_NAME = "My wallet";
+    private static final LocalDate DATE = LocalDate.now();
 
     private Wallet wallet;
 
@@ -44,11 +50,20 @@ class WalletControllerIT {
         symbolRepository.save(symbol);
 
         wallet = new Wallet(WALLET_NAME);
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(Transaction.buy(2, symbol).atPrice(EURO_AMOUNT).build());
-        wallet.register(Transaction.sell(1, symbol).atPrice(EURO_AMOUNT).build());
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(
+          Transaction.buy(2, symbol)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
+        wallet.register(Transaction.sell(1, symbol)
+          .on(DATE)
+          .atPrice(EURO_AMOUNT)
+          .build()
+        );
         walletRepository.saveAndFlush(wallet);
     }
 

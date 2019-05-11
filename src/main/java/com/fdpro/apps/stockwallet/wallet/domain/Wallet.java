@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author fdpro
  */
-@Entity
+@Entity(name = "WALLET")
 @JsonRootName("wallet")
 public class Wallet {
     @Id

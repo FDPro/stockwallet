@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TransactionTest {
+    private static final LocalDate DATE = LocalDate.now();
 
     @Test
     void buy_NegativeUnits() {
@@ -68,8 +70,13 @@ class TransactionTest {
     }
 
     @Test
-    void build_NoPrice() {
+    void build_NoDate() {
         assertThrows(IllegalArgumentException.class, () -> Transaction.buy(1, SYMBOL).build());
+    }
+
+    @Test
+    void build_NoPrice() {
+        assertThrows(IllegalArgumentException.class, () -> Transaction.buy(1, SYMBOL).on(DATE).build());
     }
 
     @Test
@@ -86,6 +93,7 @@ class TransactionTest {
     @Test
     void amount_Buy() {
         Transaction transaction = Transaction.buy(2, SYMBOL)
+          .on(DATE)
           .atPrice(EURO_AMOUNT)
           .forCost(EURO_AMOUNT)
           .build();
@@ -97,6 +105,7 @@ class TransactionTest {
     @Test
     void amount_Sell() {
         Transaction transaction = Transaction.sell(2, SYMBOL)
+          .on(DATE)
           .atPrice(EURO_AMOUNT)
           .forCost(EURO_AMOUNT)
           .build();
@@ -107,6 +116,7 @@ class TransactionTest {
     @Test
     void amount_NoCost() {
         Transaction transaction = Transaction.sell(2, SYMBOL)
+          .on(DATE)
           .atPrice(EURO_AMOUNT)
           .build();
 
@@ -118,6 +128,7 @@ class TransactionTest {
     void count_Buy() {
         int units = 2;
         Transaction transaction = Transaction.buy(units, SYMBOL)
+          .on(DATE)
           .atPrice(EURO_AMOUNT)
           .forCost(EURO_AMOUNT)
           .build();
@@ -129,6 +140,7 @@ class TransactionTest {
     void count_Sell() {
         int units = 2;
         Transaction transaction = Transaction.sell(units, SYMBOL)
+          .on(DATE)
           .atPrice(EURO_AMOUNT)
           .forCost(EURO_AMOUNT)
           .build();

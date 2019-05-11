@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WalletTest {
+    private static final LocalDate DATE = LocalDate.now();
+    
     private Wallet wallet;
 
     @BeforeEach
@@ -52,29 +55,34 @@ class WalletTest {
 
     @Test
     void amount_NoCurrencyOperations() {
-        wallet.register(Transaction.buy(1, SYMBOL).atPrice(EURO_AMOUNT).build());
+        wallet.register(
+          Transaction.buy(1, SYMBOL)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
 
         assertEquals(ZERO_DOLLARS, wallet.amount(DOLLARS));
     }
 
     @Test
     void amount_OtherSymbolOperations() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
 
         assertEquals(ZERO_DOLLARS, wallet.amount(DOLLARS));
     }
 
     @Test
     void amount_OneOperation() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
 
         assertEquals(EURO_AMOUNT, wallet.amount(EURO));
     }
 
     @Test
     void amount_MultipleOperations() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
 
         MonetaryAmount expectedAmount = Money.of(BigDecimal.valueOf(3.0), EURO);
         assertEquals(expectedAmount, wallet.amount(EURO));
@@ -92,29 +100,51 @@ class WalletTest {
 
     @Test
     void count_NoSymbolOperations() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
 
         assertEquals(0, wallet.count(SYMBOL));
     }
 
     @Test
     void count_OtherSymbolOperations() {
-        wallet.register(Transaction.buy(1, SYMBOL).atPrice(EURO_AMOUNT).build());
+        wallet.register(
+          Transaction.buy(1, SYMBOL)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
 
         assertEquals(0, wallet.count(new Symbol("ABI", "AB Inbev")));
     }
 
     @Test
     void count_OneOperation() {
-        wallet.register(Transaction.buy(1, SYMBOL).atPrice(EURO_AMOUNT).build());
+        wallet.register(
+          Transaction.buy(1, SYMBOL)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
 
         assertEquals(1, wallet.count(SYMBOL));
     }
 
     @Test
     void count_MultipleOperations() {
-        wallet.register(Transaction.buy(3, SYMBOL).atPrice(EURO_AMOUNT).forCost(EURO_AMOUNT).build());
-        wallet.register(Transaction.sell(1, SYMBOL).atPrice(EURO_AMOUNT).forCost(EURO_AMOUNT).build());
+        wallet.register(
+          Transaction.buy(3, SYMBOL)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .forCost(EURO_AMOUNT)
+            .build()
+        );
+        wallet.register(
+          Transaction.sell(1, SYMBOL)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .forCost(EURO_AMOUNT)
+            .build()
+        );
 
         assertEquals(2, wallet.count(SYMBOL));
     }

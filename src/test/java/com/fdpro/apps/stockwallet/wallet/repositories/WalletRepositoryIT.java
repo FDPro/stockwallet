@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.EURO;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class WalletRepositoryIT {
+    private static final LocalDate DATE = LocalDate.now();
+    
     private Wallet wallet;
     private Symbol symbol;
 
@@ -45,8 +48,8 @@ class WalletRepositoryIT {
 
     @Test
     void save_CashFlows() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(CashFlow.withdrawal(EURO_AMOUNT));
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(CashFlow.withdrawal(DATE, EURO_AMOUNT));
         walletRepository.saveAndFlush(wallet);
 
         Wallet foundWallet = getIfFoundFailOtherwise();
@@ -55,8 +58,18 @@ class WalletRepositoryIT {
 
     @Test
     void save_Transactions() {
-        wallet.register(Transaction.buy(2, symbol).atPrice(EURO_AMOUNT).build());
-        wallet.register(Transaction.sell(1, symbol).atPrice(EURO_AMOUNT).build());
+        wallet.register(
+          Transaction.buy(2, symbol)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
+        wallet.register(
+          Transaction.sell(1, symbol)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
         walletRepository.saveAndFlush(wallet);
 
         Wallet foundWallet = getIfFoundFailOtherwise();
@@ -65,8 +78,13 @@ class WalletRepositoryIT {
 
     @Test
     void save_CashFlowsAndTransactions() {
-        wallet.register(CashFlow.deposit(EURO_AMOUNT));
-        wallet.register(Transaction.buy(1, symbol).atPrice(EURO_AMOUNT).build());
+        wallet.register(CashFlow.deposit(DATE, EURO_AMOUNT));
+        wallet.register(
+          Transaction.buy(1, symbol)
+            .on(DATE)
+            .atPrice(EURO_AMOUNT)
+            .build()
+        );
         walletRepository.saveAndFlush(wallet);
 
         Wallet foundWallet = getIfFoundFailOtherwise();

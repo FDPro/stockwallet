@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -15,13 +16,17 @@ import java.util.Objects;
  *
  * @author fdpro
  */
-@Entity
+@Entity(name = "CASH_FLOW")
 @JsonRootName("cashFlow")
 public class CashFlow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty
     private Long id;
+
+    @Column(nullable = false)
+    @JsonProperty
+    private LocalDate date;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -36,37 +41,44 @@ public class CashFlow {
     /**
      * Creates a deposit cash flow
      *
+     * @param date the date of the deposit
      * @param amount the amount of the deposit
-     * @return a deposit {@link CashFlow} of {@code amount}
+     * @return a deposit {@link CashFlow} of {@code amount} on a given {@code date}
+     * @throws IllegalArgumentException when {@code date} is {@literal null}
      * @throws IllegalArgumentException when {@code amount} is {@literal null}
      * @throws IllegalArgumentException when {@code amount} is lesser than or equals to 0
      */
-    public static CashFlow deposit(MonetaryAmount amount) {
+    public static CashFlow deposit(LocalDate date, MonetaryAmount amount) {
+        Assert.notNull(date, "Date mustn't be null");
         Assert.notNull(amount, "Amount mustn't be null");
         Assert.isTrue(amount.isPositive(), "Amount must be greater than 0");
 
-        return new CashFlow(CashFlowType.DEPOSIT, amount);
+        return new CashFlow(CashFlowType.DEPOSIT, date, amount);
     }
 
     /**
      * Creates a withdrawal cash flow
      *
+     * @param date the date of the withdrawal
      * @param amount the amount of the withdrawal
-     * @return a withdrawal {@link CashFlow} of {@code amount}
+     * @return a withdrawal {@link CashFlow} of {@code amount} on a given {@code date}
+     * @throws IllegalArgumentException when {@code date} is {@literal null}
      * @throws IllegalArgumentException when {@code amount} is {@literal null}
      * @throws IllegalArgumentException when {@code amount} is lesser than or equals to 0
      */
-    public static CashFlow withdrawal(MonetaryAmount amount) {
+    public static CashFlow withdrawal(LocalDate date, MonetaryAmount amount) {
+        Assert.notNull(date, "Date mustn't be null");
         Assert.notNull(amount, "Amount mustn't be null");
         Assert.isTrue(amount.isPositive(), "Amount must be greater than 0");
 
-        return new CashFlow(CashFlowType.WITHDRAWAL, amount);
+        return new CashFlow(CashFlowType.WITHDRAWAL, date, amount);
     }
 
     private CashFlow() {}
 
-    private CashFlow(CashFlowType type, MonetaryAmount amount) {
+    private CashFlow(CashFlowType type, LocalDate date, MonetaryAmount amount) {
         this.type = type;
+        this.date = date;
         this.amount = amount;
     }
 
