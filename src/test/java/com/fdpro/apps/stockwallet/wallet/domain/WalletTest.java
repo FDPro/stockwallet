@@ -1,5 +1,6 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.wallet.domain;
 
+import com.fdpro.apps.stockwallet.symbol.domain.Symbol;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 
-import static com.fdpro.apps.stockwallet.WalletTestUtils.*;
+import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

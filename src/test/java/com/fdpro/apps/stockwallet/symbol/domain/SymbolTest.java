@@ -1,4 +1,4 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.symbol.domain;
 
 import org.junit.jupiter.api.Test;
 

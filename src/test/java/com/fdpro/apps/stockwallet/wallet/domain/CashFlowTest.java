@@ -1,9 +1,9 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.wallet.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static com.fdpro.apps.stockwallet.WalletTestUtils.EURO_AMOUNT;
-import static com.fdpro.apps.stockwallet.WalletTestUtils.ZERO_EUROS;
+import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.EURO_AMOUNT;
+import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.ZERO_EUROS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

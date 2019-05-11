@@ -1,6 +1,6 @@
-package com.fdpro.apps.stockwallet;
+package com.fdpro.apps.stockwallet.wallet;
 
-import com.fdpro.apps.stockwallet.domain.Symbol;
+import com.fdpro.apps.stockwallet.symbol.domain.Symbol;
 import org.javamoney.moneta.Money;
 
 import javax.money.CurrencyUnit;

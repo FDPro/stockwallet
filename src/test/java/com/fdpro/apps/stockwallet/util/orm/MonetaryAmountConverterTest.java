@@ -1,11 +1,11 @@
-package com.fdpro.apps.stockwallet.domain.orm;
+package com.fdpro.apps.stockwallet.util.orm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.money.format.MonetaryParseException;
 
-import static com.fdpro.apps.stockwallet.WalletTestUtils.EURO_AMOUNT;
+import static com.fdpro.apps.stockwallet.wallet.WalletTestUtils.EURO_AMOUNT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MonetaryAmountConverterTest {

@@ -1,5 +1,8 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.wallet.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fdpro.apps.stockwallet.symbol.domain.Symbol;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
 
@@ -16,14 +19,20 @@ import java.util.Objects;
  * @author fdpro
  */
 @Entity
+@JsonRootName("wallet")
 public class Wallet {
     @Id
+    @JsonProperty
     private String name;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
+    @JsonProperty
     private List<CashFlow> cashFlows;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
+    @JsonProperty
     private List<Transaction> transactions;
 
     private Wallet() {}

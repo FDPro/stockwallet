@@ -1,6 +1,8 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.wallet.domain;
 
-import com.fdpro.apps.stockwallet.domain.orm.MonetaryAmountConverter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fdpro.apps.stockwallet.util.orm.MonetaryAmountConverter;
 import org.springframework.util.Assert;
 
 import javax.money.MonetaryAmount;
@@ -14,15 +16,21 @@ import java.util.Objects;
  * @author fdpro
  */
 @Entity
+@JsonRootName("cashFlow")
 public class CashFlow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty
     private Long id;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonProperty
     private CashFlowType type;
+
     @Column(nullable = false)
     @Convert(converter = MonetaryAmountConverter.class)
+    @JsonProperty
     private MonetaryAmount amount;
 
     /**

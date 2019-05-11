@@ -1,4 +1,4 @@
-package com.fdpro.apps.stockwallet.domain.orm;
+package com.fdpro.apps.stockwallet.util.orm;
 
 import org.javamoney.moneta.Money;
 

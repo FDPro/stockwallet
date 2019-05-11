@@ -1,6 +1,6 @@
-package com.fdpro.apps.stockwallet.repositories;
+package com.fdpro.apps.stockwallet.wallet.repositories;
 
-import com.fdpro.apps.stockwallet.domain.Wallet;
+import com.fdpro.apps.stockwallet.wallet.domain.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.Repository;
 

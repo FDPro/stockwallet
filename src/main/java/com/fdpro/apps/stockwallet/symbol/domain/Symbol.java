@@ -1,5 +1,7 @@
-package com.fdpro.apps.stockwallet.domain;
+package com.fdpro.apps.stockwallet.symbol.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -8,10 +10,14 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@JsonRootName("symbol")
 public class Symbol {
     @Id
+    @JsonProperty
     private String code;
+
     @Column(nullable = false)
+    @JsonProperty
     private String name;
 
     private Symbol() {}
