@@ -1,4 +1,4 @@
-package com.fdpro.apps.stockwallet.wallet.ws;
+package com.fdpro.apps.stockwallet.wallet.controllers;
 
 import com.fdpro.apps.stockwallet.symbol.repositories.SymbolRepository;
 import com.fdpro.apps.stockwallet.wallet.domain.CashFlow;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class WalletServiceIT {
+class WalletControllerIT {
     private static final String WALLET_NAME = "My wallet";
 
     private Wallet wallet;

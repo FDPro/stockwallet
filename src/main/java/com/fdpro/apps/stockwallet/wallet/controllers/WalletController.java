@@ -1,4 +1,4 @@
-package com.fdpro.apps.stockwallet.wallet.ws;
+package com.fdpro.apps.stockwallet.wallet.controllers;
 
 import com.fdpro.apps.stockwallet.wallet.domain.Wallet;
 import com.fdpro.apps.stockwallet.wallet.repositories.WalletRepository;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-public class WalletService {
+public class WalletController {
     private WalletRepository repository;
 
     @Autowired
-    public WalletService(WalletRepository repository) {
+    public WalletController(WalletRepository repository) {
         this.repository = repository;
     }
 
