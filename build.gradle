@@ -25,6 +25,8 @@ dependencies {
 
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 
+    compile group: 'info.picocli', name: 'picocli', version: '4.0.0-alpha-2'
+
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.3.RELEASE'
     testCompile 'com.h2database:h2:1.4.199'
